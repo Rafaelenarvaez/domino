@@ -1,0 +1,56 @@
+<div class="torneo-rondas-container">
+  <div class="top-bar">
+    <button class="back-btn" (click)="verPosiciones()">🏆 Ver Tabla de Posiciones</button>
+  </div>
+
+  <div class="header-section">
+    <h1 class="torneo-name">{{ state.nombre }}</h1>
+    <h2 class="ronda-title">Ronda {{ state.rondaActual }} de {{ state.totalRondas }}</h2>
+    
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="(state.mesasTerminadas / state.mesasRondaActual.length) * 100"></div>
+    </div>
+    <p class="progress-text">Mesas terminadas: {{ state.mesasTerminadas }} / {{ state.mesasRondaActual.length }}</p>
+  </div>
+
+  <div class="mesas-grid">
+    <div class="mesa-card" *ngFor="let mesa of state.mesasRondaActual" [class.terminada]="mesa.resultadoRegistrado">
+      <div class="mesa-header">
+        <span class="mesa-id">Mesa {{ mesa.id }}</span>
+        <span class="mesa-status" *ngIf="mesa.resultadoRegistrado">✅ Finalizada</span>
+        <span class="mesa-status pending" *ngIf="!mesa.resultadoRegistrado">⏳ En juego</span>
+      </div>
+
+      <div class="mesa-matchup">
+        <div class="equipo">
+          <span class="jugador">{{ mesa.jugadores.jugador1A }}</span>
+          <span class="y-separator">y</span>
+          <span class="jugador">{{ mesa.jugadores.jugador2A }}</span>
+        </div>
+        
+        <div class="vs-badge">VS</div>
+        
+        <div class="equipo">
+          <span class="jugador">{{ mesa.jugadores.jugador1B }}</span>
+          <span class="y-separator">y</span>
+          <span class="jugador">{{ mesa.jugadores.jugador2B }}</span>
+        </div>
+      </div>
+
+      <button class="btn-anotador" (click)="abrirMesa(mesa.id)">
+        {{ mesa.resultadoRegistrado ? 'Ver Resultado' : 'Abrir Anotador' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="actions-footer" *ngIf="torneoService.rondaCompletada()">
+    <button class="btn-next-round" *ngIf="state.rondaActual < state.totalRondas" (click)="siguienteRonda()">
+      Siguiente Ronda ➔
+    </button>
+    
+    <button class="btn-finish-torneo" *ngIf="state.rondaActual >= state.totalRondas" (click)="finalizarTorneo()">
+      🏆 Finalizar Torneo 🏆
+    </button>
+  </div>
+
+</div>

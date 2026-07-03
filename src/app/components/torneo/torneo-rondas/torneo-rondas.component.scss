@@ -1,0 +1,205 @@
+.torneo-rondas-container {
+  min-height: 100vh;
+  padding: 16px;
+  background: #f0f4f8;
+  font-family: Arial, sans-serif;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.back-btn {
+  background: #ffca28;
+  color: #000;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover {
+    background: #ffb300;
+    transform: translateY(-2px);
+  }
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.torneo-name {
+  font-size: 28px;
+  color: #2c3e50;
+  margin: 0 0 8px 0;
+}
+
+.ronda-title {
+  font-size: 22px;
+  color: #34495e;
+  margin: 0 0 16px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  max-width: 400px;
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 5px;
+  margin: 0 auto 8px auto;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #48bb78;
+  transition: width 0.5s ease-out;
+}
+
+.progress-text {
+  color: #718096;
+  font-size: 14px;
+  margin: 0;
+}
+
+.mesas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.mesa-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  
+  &.terminada {
+    border-color: #48bb78;
+    background: #f0fff4;
+  }
+}
+
+.mesa-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.mesa-id {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2d3748;
+}
+
+.mesa-status {
+  font-size: 14px;
+  font-weight: bold;
+  color: #48bb78;
+  
+  &.pending {
+    color: #ed8936;
+  }
+}
+
+.mesa-matchup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.equipo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.y-separator {
+  color: #a0aec0;
+  font-size: 14px;
+}
+
+.vs-badge {
+  background: #e2e8f0;
+  color: #4a5568;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.btn-anotador {
+  width: 100%;
+  background: #3182ce;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  
+  &:hover {
+    background: #2b6cb0;
+  }
+}
+
+.mesa-card.terminada .btn-anotador {
+  background: #718096;
+  &:hover {
+    background: #4a5568;
+  }
+}
+
+.actions-footer {
+  margin-top: 40px;
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+.btn-next-round, .btn-finish-torneo {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.2s;
+}
+
+.btn-next-round {
+  background: #3182ce;
+  color: white;
+  
+  &:hover {
+    background: #2b6cb0;
+    transform: translateY(-2px);
+  }
+}
+
+.btn-finish-torneo {
+  background: #ff5252;
+  color: white;
+  
+  &:hover {
+    background: #ff1744;
+    transform: translateY(-2px);
+  }
+}

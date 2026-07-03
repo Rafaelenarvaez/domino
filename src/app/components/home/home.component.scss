@@ -1,0 +1,329 @@
+/* Permitir scroll en toda la pantalla del componente */
+:host {
+  display: block;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+/* HERO ocupa pantalla completa */
+.full-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: radial-gradient(circle at top, #263238, #000);
+  margin-bottom: 40px;
+}
+
+.welcome-hero {
+  text-align: center;
+  color: #fff;
+}
+
+.hero-logo {
+  width: 180px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.7));
+}
+
+.hero-title {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.hero-subtitle {
+  font-size: 14px;
+  color: #cfd8dc;
+  margin-bottom: 20px;
+}
+
+.hero-btn {
+  background: #ffca28;
+  color: #000;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  transition: 0.25s ease;
+}
+
+.hero-btn:hover:not(:disabled) {
+  transform: scale(1.04);
+}
+
+.hero-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hero-btn.btn-secondary {
+  background: transparent;
+  color: #ffca28;
+  border: 2px solid #ffca28;
+}
+
+.hero-btn.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 202, 40, 0.15);
+}
+
+.hero-btn.btn-torneo {
+  background: #ff5252;
+  color: #fff;
+  border: 2px solid #ff5252;
+}
+
+.hero-btn.btn-torneo:hover:not(:disabled) {
+  background: #ff1744;
+  border-color: #ff1744;
+}
+
+/* FORMULARIO */
+
+#form-partida {
+  margin-top: 0;
+}
+
+.home-container {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  background: #eceff1;
+}
+
+.home-card {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.title {
+  font-size: 22px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.field-group {
+  margin-bottom: 16px;
+}
+
+.field-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: #37474f;
+}
+
+/* Inputs generales del formulario */
+.field-group input {
+  width: calc(100% - 16px);
+  padding: 10px;
+  margin: 0 auto;
+  border-radius: 8px;
+  border: 1px solid #b0bec5;
+  font-size: 14px;
+  box-sizing: border-box;
+  display: block;
+}
+
+/* ✅ SELECT ESTILO PRO (TV friendly) */
+.select-points {
+  width: calc(100% - 16px);
+  padding: 12px;
+  margin: 0 auto;
+  border-radius: 10px;
+  border: 1px solid #b0bec5;
+  font-size: 16px;
+  background: #ffffff;
+  color: #263238;
+  box-sizing: border-box;
+  display: block;
+}
+
+.select-points:focus {
+  outline: none;
+  border-color: #ffca28;
+  box-shadow: 0 0 0 3px rgba(255, 202, 40, 0.35);
+}
+
+/* quitar flechas number */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* MESAS */
+
+.mesas-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.mesa-card {
+  background: #fafafa;
+  border: 1px solid #cfd8dc;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.mesa-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+/* Inputs dentro del card de mesa */
+.mesa-card .field-group input,
+.mesa-card .field-group .select-points {
+  width: calc(100% - 20px);
+  margin: 0 auto 12px auto;
+}
+
+/* BOTÓN FINAL */
+.start-btn {
+  display: block;
+  margin: 20px auto 0;
+}
+
+/* ⏱ CRONÓMETRO SECTION */
+.cronometro-section {
+  margin-top: 24px;
+  padding: 20px;
+  background: #f5f7fa;
+  border-radius: 12px;
+  border: 1px solid #dde3ea;
+}
+
+.cronometro-title {
+  font-size: 18px;
+  margin: 0 0 16px 0;
+  text-align: center;
+  color: #263238;
+}
+
+.cronometro-toggle {
+  text-align: center;
+}
+
+.toggle-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #37474f;
+  font-weight: 500;
+}
+
+.toggle-buttons,
+.duration-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.toggle-btn {
+  padding: 10px 28px;
+  border-radius: 10px;
+  border: 2px solid #b0bec5;
+  background: #ffffff;
+  color: #37474f;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.toggle-btn:hover {
+  border-color: #ffca28;
+  background: #fff8e1;
+}
+
+.toggle-btn.active {
+  background: #ffca28;
+  border-color: #ffca28;
+  color: #000;
+  box-shadow: 0 2px 8px rgba(255, 202, 40, 0.4);
+}
+
+.cronometro-duration {
+  margin-top: 16px;
+  text-align: center;
+  animation: slideDown 0.3s ease-out;
+}
+
+.duration-input-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.time-input {
+  width: 120px !important;
+  padding: 12px !important;
+  font-size: 18px !important;
+  text-align: center;
+  border-radius: 8px;
+  border: 2px solid #b0bec5 !important;
+  transition: all 0.25s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #ffca28 !important;
+    box-shadow: 0 0 0 3px rgba(255, 202, 40, 0.35);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .mesa-card {
+    padding: 10px;
+  }
+
+  .mesa-card .field-group input,
+  .mesa-card .field-group .select-points {
+    width: calc(100% - 10px);
+  }
+
+  .toggle-buttons,
+  .duration-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .toggle-btn,
+  .duration-btn {
+    width: 80%;
+  }
+}

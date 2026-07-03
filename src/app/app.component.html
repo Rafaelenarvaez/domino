@@ -1,0 +1,21 @@
+<app-splash *ngIf="showSplash"></app-splash>
+
+<!-- Enrutador Principal -->
+<router-outlet *ngIf="!showSplash"></router-outlet>
+
+<!-- Modal Global de Confirmación de Cierre de App -->
+<div class="modal-overlay" *ngIf="showExitAppModal" (click)="cancelExit()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2 class="modal-title">¿Cerrar aplicación?</h2>
+    <p class="modal-text">¿Estás seguro de que deseas salir del Anotador?</p>
+    
+    <div class="modal-buttons">
+      <button id="cancelExitBtn" class="btn-cancel" tabindex="0" (click)="cancelExit()" (keydown.enter)="cancelExit()">
+        Cancelar
+      </button>
+      <button class="btn-confirm" tabindex="0" (click)="confirmExit()" (keydown.enter)="confirmExit()">
+        Sí, Salir
+      </button>
+    </div>
+  </div>
+</div>

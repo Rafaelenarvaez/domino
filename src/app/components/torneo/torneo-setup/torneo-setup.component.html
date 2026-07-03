@@ -1,0 +1,93 @@
+<div class="torneo-setup-container">
+  
+  <div class="top-bar">
+    <button class="back-btn" (click)="volver()">← Volver al inicio</button>
+  </div>
+
+  <div class="logo-container">
+    <img src="assets/IMG_5750.jpg" alt="Margarita Dominó" class="logo" />
+  </div>
+
+  <div class="setup-card">
+    <h1 class="setup-title">🏆 Configurar Torneo</h1>
+
+    <div class="config-section">
+      <div class="field-group">
+        <label>Nombre del Torneo</label>
+        <input type="text" [(ngModel)]="nombreTorneo" placeholder="Ej: Torneo Verano 2026" />
+      </div>
+
+      <div class="grid-2-col">
+        <div class="field-group">
+          <label>Cantidad de Rondas</label>
+          <input type="number" min="1" [(ngModel)]="totalRondas" />
+        </div>
+
+        <div class="field-group">
+          <label>Puntos para ganar</label>
+          <select [(ngModel)]="puntosParaGanar" class="select-points">
+            <option [ngValue]="100">100 puntos</option>
+            <option [ngValue]="200">200 puntos</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⏱ CRONÓMETRO CONFIG -->
+    <div class="cronometro-section">
+      <h3 class="cronometro-title">⏱ Cronómetro del Torneo</h3>
+
+      <div class="cronometro-toggle">
+        <label class="toggle-label">¿Incluir cronómetro por mesa?</label>
+        <div class="toggle-buttons">
+          <button
+            class="toggle-btn"
+            [class.active]="cronometroHabilitado"
+            (click)="cronometroHabilitado = true">
+            Sí
+          </button>
+          <button
+            class="toggle-btn"
+            [class.active]="!cronometroHabilitado"
+            (click)="cronometroHabilitado = false">
+            No
+          </button>
+        </div>
+      </div>
+
+      <div class="cronometro-duration" *ngIf="cronometroHabilitado">
+        <label class="toggle-label">Duración por ronda (minutos):</label>
+        <div class="duration-input-wrapper">
+          <input type="number" min="1" [(ngModel)]="cronometroMinutos" placeholder="Ej: 45" class="time-input" />
+        </div>
+      </div>
+    </div>
+
+    <div class="players-section">
+      <h2 class="section-subtitle">Jugadores Inscritos</h2>
+      <p class="helper-text">
+        Ingresa los nombres. Deben ser múltiplos de 4 (Mínimo 4 jugadores).
+        <br>
+        <span [class.text-success]="esValido()" [class.text-danger]="!esValido()">
+          Inscritos válidos: {{ jugadoresValidos.length }}
+        </span>
+      </p>
+
+      <div class="players-list">
+        <div class="player-row" *ngFor="let jugador of jugadores; let i = index">
+          <span class="player-number">{{ i + 1 }}.</span>
+          <input type="text" [(ngModel)]="jugador.nombre" placeholder="Nombre del jugador" />
+          <button class="btn-remove" (click)="eliminarJugador(i)" title="Eliminar jugador">✖</button>
+        </div>
+      </div>
+
+      <button class="btn-add-player" (click)="agregarJugador()">+ Agregar otro jugador</button>
+    </div>
+
+    <button class="btn-start-torneo" 
+            [disabled]="!esValido()" 
+            (click)="iniciarTorneo()">
+      Generar 1ª Ronda y Comenzar
+    </button>
+  </div>
+</div>

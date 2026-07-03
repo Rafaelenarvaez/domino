@@ -1,0 +1,62 @@
+<div class="ranking-container">
+  
+  <div class="top-bar">
+    <button class="back-btn" (click)="volver()">← Volver al inicio</button>
+  </div>
+
+  <div class="logo-container">
+    <img src="assets/IMG_5750.jpg" alt="Margarita Dominó" class="logo" />
+  </div>
+
+  <div class="ranking-card">
+    <h1 class="ranking-title">🏆 Ranking de Jugadores 🏆</h1>
+
+    <div class="ranking-content" *ngIf="ranking.length > 0; else emptyState">
+      <div class="table-responsive">
+        <table class="ranking-table">
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th class="col-name">Jugador</th>
+              <th class="col-victories" title="Partidas Ganadas">PG</th>
+              <th class="col-defeats" title="Partidas Perdidas">PP</th>
+              <th class="col-played" title="Juegos Jugados">JJ</th>
+              <th class="col-points" title="Puntos Obtenidos">Pts</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let jugador of ranking; let i = index" 
+                [class.top-1]="i === 0"
+                [class.top-2]="i === 1"
+                [class.top-3]="i === 2">
+              <td class="col-pos">
+                <span *ngIf="i === 0">🥇</span>
+                <span *ngIf="i === 1">🥈</span>
+                <span *ngIf="i === 2">🥉</span>
+                <span *ngIf="i > 2">{{ i + 1 }}</span>
+              </td>
+              <td class="col-name fw-bold">{{ jugador.nombre }}</td>
+              <td class="col-victories text-success fw-bold">{{ jugador.partidasGanadas }}</td>
+              <td class="col-defeats text-danger">{{ jugador.partidasPerdidas }}</td>
+              <td class="col-played">{{ jugador.juegosJugados }}</td>
+              <td class="col-points fw-bold">{{ jugador.puntosObtenidos }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="actions-container">
+        <button class="btn-clear" (click)="limpiarRanking()">🗑 Limpiar Ranking</button>
+      </div>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <div class="empty-icon">🤷‍♂️</div>
+        <p>Aún no hay partidas registradas.</p>
+        <p class="subtitle">¡Juega una partida para empezar a ver el ranking!</p>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

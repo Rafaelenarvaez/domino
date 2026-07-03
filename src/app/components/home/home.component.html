@@ -1,0 +1,95 @@
+<!-- HERO / BIENVENIDA -->
+<div class="welcome-hero full-screen">
+  <img src="assets/IMG_5750.jpg" class="hero-logo" alt="Margarita Dominó" />
+
+  <h1 class="hero-title">Bienvenido al Club de Dominó Margarita</h1>
+  <p class="hero-subtitle">Donde cada mano cuenta una historia.</p>
+
+  <div class="hero-actions">
+    <button class="hero-btn" (click)="irACrearPartida()">🎲 Partida Tradicional</button>
+    <button class="hero-btn btn-torneo" (click)="irATorneo()">🏆 Torneo</button>
+    <button class="hero-btn btn-secondary" (click)="irARanking()">📊 Ver Ranking</button>
+  </div>
+</div>
+
+<!-- FORMULARIO DE MESAS -->
+<div id="form-partida" class="home-container">
+  <div class="home-card">
+    <h2 class="title">Configurar Mesas</h2>
+
+    <div class="field-group">
+      <label>¿Cuántas mesas van a jugar?</label>
+      <input type="number" min="1" [(ngModel)]="cantidadMesas" (change)="generarMesas()" />
+    </div>
+
+    <div class="mesas-wrapper">
+      <div class="mesa-card" *ngFor="let mesa of mesas">
+        <h3>Mesa {{ mesa.id }}</h3>
+
+        <div class="field-group">
+          <label>Jugador 1 (Equipo 1)</label>
+          <input type="text" [(ngModel)]="mesa.jugadores.jugador1A" placeholder="Nombre" />
+        </div>
+
+        <div class="field-group">
+          <label>Jugador 2 (Equipo 1)</label>
+          <input type="text" [(ngModel)]="mesa.jugadores.jugador2A" placeholder="Nombre" />
+        </div>
+
+        <div class="field-group">
+          <label>Jugador 1 (Equipo 2)</label>
+          <input type="text" [(ngModel)]="mesa.jugadores.jugador1B" placeholder="Nombre" />
+        </div>
+
+        <div class="field-group">
+          <label>Jugador 2 (Equipo 2)</label>
+          <input type="text" [(ngModel)]="mesa.jugadores.jugador2B" placeholder="Nombre" />
+        </div>
+
+        <!-- ✅ SELECT PARA TV / CHROMECAST -->
+        <div class="field-group">
+          <label>Puntos para ganar</label>
+
+          <select [(ngModel)]="mesa.puntosParaGanar" class="select-points">
+            <option [ngValue]="100">100 puntos</option>
+            <option [ngValue]="200">200 puntos</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⏱ CRONÓMETRO CONFIG -->
+    <div class="cronometro-section">
+      <h3 class="cronometro-title">⏱ Cronómetro</h3>
+
+      <div class="cronometro-toggle">
+        <label class="toggle-label">¿Incluir cronómetro por mesa?</label>
+        <div class="toggle-buttons">
+          <button
+            class="toggle-btn"
+            [class.active]="cronometroHabilitado"
+            (click)="cronometroHabilitado = true">
+            Sí
+          </button>
+          <button
+            class="toggle-btn"
+            [class.active]="!cronometroHabilitado"
+            (click)="cronometroHabilitado = false">
+            No
+          </button>
+        </div>
+      </div>
+
+      <div class="cronometro-duration" *ngIf="cronometroHabilitado">
+        <label class="toggle-label">Duración por mesa (minutos):</label>
+        <div class="duration-input-wrapper">
+          <input type="number" min="1" [(ngModel)]="cronometroMinutos" placeholder="Ej: 45" class="time-input" />
+        </div>
+      </div>
+    </div>
+
+    <button class="hero-btn start-btn" [disabled]="!formCompleto()" (click)="crearPartida()">
+      Crear Mesas y Empezar
+    </button>
+  </div>
+</div>

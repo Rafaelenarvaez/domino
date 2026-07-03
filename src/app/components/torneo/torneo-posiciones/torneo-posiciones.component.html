@@ -1,0 +1,71 @@
+<div class="torneo-posiciones-container">
+  
+  <div class="top-bar">
+    <button class="back-btn" (click)="volver()">
+      {{ torneoActivo ? '← Volver a las Rondas' : '← Volver al inicio' }}
+    </button>
+  </div>
+
+  <div class="logo-container">
+    <img src="assets/IMG_5750.jpg" alt="Margarita Dominó" class="logo" />
+  </div>
+  
+  <div class="export-container">
+    <button class="btn-export-pdf" tabindex="0" (click)="exportarPDF()">
+      📄 Exportar a PDF
+    </button>
+  </div>
+
+  <div class="ranking-card" id="tabla-posiciones-pdf">
+    <h1 class="ranking-title">
+      {{ torneoActivo ? '🏆 Posiciones del Torneo 🏆' : '🏆 Torneo Finalizado 🏆' }}
+    </h1>
+    <h2 class="torneo-name">{{ nombreTorneo }}</h2>
+
+    <div class="ranking-content" *ngIf="jugadores.length > 0; else emptyState">
+      <div class="table-responsive">
+        <table class="ranking-table">
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th class="col-name">Jugador</th>
+              <th class="col-victories" title="Partidas Ganadas (Match Points)">PG</th>
+              <th class="col-defeats" title="Partidas Perdidas">PP</th>
+              <th class="col-diff" title="Diferencia de Puntos">DIF</th>
+              <th class="col-points" title="Puntos a Favor">FAV</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let jugador of jugadores; let i = index" 
+                tabindex="0"
+                [class.top-1]="i === 0"
+                [class.top-2]="i === 1"
+                [class.top-3]="i === 2">
+              <td class="col-pos">
+                <span *ngIf="i === 0">🥇</span>
+                <span *ngIf="i === 1">🥈</span>
+                <span *ngIf="i === 2">🥉</span>
+                <span *ngIf="i > 2">{{ i + 1 }}</span>
+              </td>
+              <td class="col-name fw-bold">{{ jugador.nombre }}</td>
+              <td class="col-victories text-success fw-bold">{{ jugador.pg }}</td>
+              <td class="col-defeats text-danger">{{ jugador.pp }}</td>
+              <td class="col-diff" [class.text-success]="jugador.diferencia > 0" [class.text-danger]="jugador.diferencia < 0">
+                {{ jugador.diferencia > 0 ? '+' : '' }}{{ jugador.diferencia }}
+              </td>
+              <td class="col-points fw-bold">{{ jugador.puntosFavor }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <div class="empty-icon">🤷‍♂️</div>
+        <p>Aún no hay jugadores registrados.</p>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

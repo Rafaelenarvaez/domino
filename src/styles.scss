@@ -1,0 +1,41 @@
+html, body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+/* ========================================================
+   ESTILOS GLOBALES PARA SMART TV (SPATIAL NAVIGATION)
+   ======================================================== */
+button:focus,
+input:focus,
+select:focus,
+a:focus,
+[tabindex="0"]:focus,
+.sn-focused {
+  outline: 4px solid #ffca28 !important; /* Borde amarillo grueso muy visible en TVs */
+  outline-offset: 2px !important;
+  box-shadow: 0 0 15px rgba(255, 202, 40, 0.8) !important;
+  transform: scale(1.05) !important;
+  transition: transform 0.15s ease, outline 0.1s ease, box-shadow 0.1s ease !important;
+  z-index: 10 !important; /* Para que sobresalga por encima de elementos adyacentes */
+  position: relative;
+}
+
+/* Quitamos el outline predeterminado si no tiene foco espacial (en algunos browsers) */
+button, input, select, a, [tabindex="0"] {
+  outline: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}

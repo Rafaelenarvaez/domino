@@ -1,0 +1,76 @@
+.mesas-container {
+  min-height: 100vh;
+  padding: 24px;
+  background: #eceff1;
+}
+
+.mesas-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.mesas-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.mesa-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.mesa-players {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.mesa-goal {
+  margin: 4px 0 12px 0;
+  font-size: 13px;
+  color: #455a64;
+}
+
+.mesa-btn {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.back-btn {
+  margin-top: 24px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background: #757575;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  margin-top: -5px;
+}
+
+.logo {
+  width: 140px;
+  height: auto;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.5));
+  animation: fadeIn 0.6s ease-out;
+}
+
+@media (max-width: 480px) {
+  .logo {
+    width: 110px;
+  }
+}

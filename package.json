@@ -1,0 +1,70 @@
+{
+  "name": "anotador",
+  "version": "0.0.0",
+  "private": true,
+  "main": "electron-main.js",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "ng:build": "ng build --configuration production",
+    "electron": "electron .",
+    "electron:serve": "concurrently \"ng serve --port 4200\" \"wait-on http://localhost:4200 && electron .\"",
+    "electron:build": "npm run ng:build && electron-builder"
+  },
+  "dependencies": {
+    "@angular/animations": "^15.2.0",
+    "@angular/common": "^15.2.0",
+    "@angular/compiler": "^15.2.0",
+    "@angular/core": "^15.2.0",
+    "@angular/forms": "^15.2.0",
+    "@angular/platform-browser": "^15.2.0",
+    "@angular/platform-browser-dynamic": "^15.2.0",
+    "@angular/router": "^15.2.0",
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/core": "^8.4.1",
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "rxjs": "~7.8.0",
+    "spatial-navigation-js": "^1.0.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.12.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^15.2.11",
+    "@angular/cli": "~15.2.11",
+    "@angular/compiler-cli": "^15.2.0",
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/cli": "^8.4.1",
+    "@types/jasmine": "~4.3.0",
+    "concurrently": "^9.2.1",
+    "electron": "^39.2.6",
+    "electron-builder": "^26.0.12",
+    "jasmine-core": "~4.5.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.0.0",
+    "typescript": "~4.9.4",
+    "wait-on": "^9.0.3"
+  },
+  "build": {
+    "appId": "com.anotador.domino",
+    "productName": "AnotadorDomino",
+    "directories": {
+      "output": "release-builds"
+    },
+    "files": [
+      "dist/anotador/**/*",
+      "electron-main.js",
+      "preload.js"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "src/assets/IMG_5750.ico"
+    }
+  }
+}

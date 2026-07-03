@@ -1,0 +1,211 @@
+<div class="score-container">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <button class="back-btn" (click)="volverAMesas()">← Volver</button>
+    </div>
+
+    <!-- LOGO -->
+    <div class="logo-container">
+        <img src="assets/IMG_5750.jpg" alt="Margarita Dominó" class="logo" />
+    </div>
+
+    <!-- ENCABEZADO JUGADORES -->
+    <div class="header-container">
+        <div class="header-row">
+
+            <!-- EQUIPO 1 -->
+            <div class="team-line">
+                <div class="player-item" [class.selected]="salidor === jugadoresEquipo1[0].id"
+                    [class.disabled]="salidor && salidor !== jugadoresEquipo1[0].id"
+                    (click)="selectSalidor(jugadoresEquipo1[0].id)">
+
+                    <span class="player-text">{{ jugadoresEquipo1[0].nombre }}</span>
+                    <input type="radio" name="salidor" [checked]="salidor === jugadoresEquipo1[0].id">
+                </div>
+
+                <span class="dash">-</span>
+
+                <div class="player-item" [class.selected]="salidor === jugadoresEquipo1[1].id"
+                    [class.disabled]="salidor && salidor !== jugadoresEquipo1[1].id"
+                    (click)="selectSalidor(jugadoresEquipo1[1].id)">
+
+                    <span class="player-text">{{ jugadoresEquipo1[1].nombre }}</span>
+                    <input type="radio" name="salidor" [checked]="salidor === jugadoresEquipo1[1].id">
+                </div>
+            </div>
+
+            <!-- DIVISOR -->
+            <div class="divider">|</div>
+
+            <!-- EQUIPO 2 -->
+            <div class="team-line">
+                <div class="player-item" [class.selected]="salidor === jugadoresEquipo2[0].id"
+                    [class.disabled]="salidor && salidor !== jugadoresEquipo2[0].id"
+                    (click)="selectSalidor(jugadoresEquipo2[0].id)">
+
+                    <span class="player-text">{{ jugadoresEquipo2[0].nombre }}</span>
+                    <input type="radio" name="salidor" [checked]="salidor === jugadoresEquipo2[0].id">
+                </div>
+
+                <span class="dash">-</span>
+
+                <div class="player-item" [class.selected]="salidor === jugadoresEquipo2[1].id"
+                    [class.disabled]="salidor && salidor !== jugadoresEquipo2[1].id"
+                    (click)="selectSalidor(jugadoresEquipo2[1].id)">
+
+                    <span class="player-text">{{ jugadoresEquipo2[1].nombre }}</span>
+                    <input type="radio" name="salidor" [checked]="salidor === jugadoresEquipo2[1].id">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- OBJETIVO -->
+    <div class="goal-container" *ngIf="puntosParaGanar">
+        <div class="goal-badge">
+            🎯 Objetivo: {{ puntosParaGanar }} puntos
+        </div>
+    </div>
+
+    <!-- ⏱ CRONÓMETRO -->
+    <div class="cronometro-widget" *ngIf="cronometroConfig.habilitado">
+        <div class="cronometro-display"
+             [class.warning]="timerRemaining <= 300 && timerRemaining > 60"
+             [class.danger]="timerRemaining <= 60 && !timerFinished"
+             [class.finished]="timerFinished">
+            <span class="timer-icon">⏱</span>
+            <span class="timer-time">{{ formatTime(timerRemaining) }}</span>
+            <span class="timer-label" *ngIf="timerFinished">¡Tiempo!</span>
+        </div>
+
+        <div class="cronometro-controls">
+            <button class="ctrl-btn ctrl-start"
+                    (click)="iniciarTimer()"
+                    [disabled]="timerRunning || timerFinished">
+                ▶ Iniciar
+            </button>
+            <button class="ctrl-btn ctrl-pause"
+                    (click)="pausarTimer()"
+                    [disabled]="!timerRunning">
+                ⏸ Pausar
+            </button>
+            <button class="ctrl-btn ctrl-reset"
+                    (click)="reiniciarTimer()">
+                🔄 Reiniciar
+            </button>
+        </div>
+    </div>
+
+    <!-- HOJA -->
+    <div class="scores-table">
+
+        <!-- EQUIPO 1 -->
+        <div class="scores-column left-column">
+            <div class="team-title">
+                {{ jugadoresEquipo1[0].nombre }} — {{ jugadoresEquipo1[1].nombre }}
+            </div>
+
+            <ng-container *ngFor="let row of anotador.puntajes; let i = index">
+                <ng-container *ngIf="i > 0">
+                    <div class="row" [class.ink]="row.anim">
+
+                        <div class="value-box" [class.tachado]="row.tachadoEquipo1"
+                            tabindex="0"
+                            (click)="toggleTachar(i, 'equipo1')"
+                            (keydown.enter)="toggleTachar(i, 'equipo1'); $event.preventDefault()">
+                            <span>{{ row.equipo1 }}</span>
+                            <div class="tachado-line" *ngIf="row.tachadoEquipo1"></div>
+                        </div>
+
+                        <button class="delete" (click)="toggleTachar(i, 'equipo1')" [disabled]="partidaTerminada">
+                            {{ row.tachadoEquipo1 ? '↩' : '✖' }}
+                        </button>
+
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <div class="add-row">
+                <input type="number" min="0" [(ngModel)]="newScore1" placeholder="0" [disabled]="partidaTerminada">
+                <button (click)="confirmScore('equipo1', newScore1)" [disabled]="newScore1 === null || newScore1 < 0 || partidaTerminada">
+                    Agregar
+                </button>
+            </div>
+
+            <div class="total">{{ anotador.totales.equipo1 }}</div>
+        </div>
+
+        <!-- EQUIPO 2 -->
+        <div class="scores-column right-column">
+            <div class="team-title">
+                {{ jugadoresEquipo2[0].nombre }} — {{ jugadoresEquipo2[1].nombre }}
+            </div>
+
+            <ng-container *ngFor="let row of anotador.puntajes; let i = index">
+                <ng-container *ngIf="i > 0">
+                    <div class="row" [class.ink]="row.anim">
+
+                        <div class="value-box" [class.tachado]="row.tachadoEquipo2"
+                            tabindex="0"
+                            (click)="toggleTachar(i, 'equipo2')"
+                            (keydown.enter)="toggleTachar(i, 'equipo2'); $event.preventDefault()">
+                            <span>{{ row.equipo2 }}</span>
+                            <div class="tachado-line" *ngIf="row.tachadoEquipo2"></div>
+                        </div>
+
+                        <button class="delete" (click)="toggleTachar(i, 'equipo2')" [disabled]="partidaTerminada">
+                            {{ row.tachadoEquipo2 ? '↩' : '✖' }}
+                        </button>
+
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <div class="add-row">
+                <input type="number" min="0" [(ngModel)]="newScore2" placeholder="0" [disabled]="partidaTerminada">
+                <button (click)="confirmScore('equipo2', newScore2)" [disabled]="newScore2 === null || newScore2 < 0 || partidaTerminada">
+                    Agregar
+                </button>
+            </div>
+
+            <div class="total">{{ anotador.totales.equipo2 }}</div>
+        </div>
+
+    </div>
+</div>
+
+  <!-- MODAL FINAL -->
+  <div class="modal-backdrop" *ngIf="showModal" (click)="salir()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2 class="modal-title">{{ ganadorTexto }}</h2>
+      <p class="modal-score">
+          {{ anotador.totales.equipo1 }} — {{ anotador.totales.equipo2 }}
+      </p>
+      
+      <div class="modal-buttons">
+        <button class="modal-btn primary" tabindex="0" (click)="nuevaPartida()" *ngIf="!mesaData?.esTorneo">🔄 Nueva Partida</button>
+        <button id="btnVolverMesas" class="modal-btn secondary" tabindex="0" (click)="salir()">🚪 Volver a Mesas</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmación de Salida -->
+  <div class="modal-overlay" *ngIf="showExitMatchModal" (click)="cancelarSalida()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2 class="modal-title">¿Abandonar Partida?</h2>
+      <p class="modal-winner" style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
+        El progreso de esta partida se perderá si no ha terminado. ¿Estás seguro de que deseas salir?
+      </p>
+      
+      <div class="modal-buttons" style="display: flex; gap: 15px;">
+        <button id="cancelExitMatchBtn" class="btn-nueva-partida" style="background-color: #e0e0e0; color: #333;" tabindex="0" (click)="cancelarSalida()" (keydown.enter)="cancelarSalida()">
+          Continuar Jugando
+        </button>
+        <button class="btn-volver-mesas" style="background-color: #d32f2f;" tabindex="0" (click)="confirmarSalida()" (keydown.enter)="confirmarSalida()">
+          Sí, Abandonar
+        </button>
+      </div>
+    </div>
+  </div>
