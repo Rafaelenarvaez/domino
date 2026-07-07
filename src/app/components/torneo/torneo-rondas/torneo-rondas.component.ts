@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TorneoService, TorneoState } from '../../../services/torneo.service';
 import { PartidaLocalService, Mesa } from '../../../services/partida-local.service';
@@ -8,9 +8,17 @@ import { PartidaLocalService, Mesa } from '../../../services/partida-local.servi
   templateUrl: './torneo-rondas.component.html',
   styleUrls: ['./torneo-rondas.component.scss']
 })
-export class TorneoRondasComponent implements OnInit {
+export class TorneoRondasComponent implements OnInit, OnDestroy {
 
   state!: TorneoState;
+
+  // ⏱ Cronómetro global (basado en Mesa 1)
+  cronometroConfig: any = { habilitado: false, minutos: 30 };
+  timerRemaining: number = 0;
+  timerRunning: boolean = false;
+  timerFinished: boolean = false;
+  private refreshInterval: any = null;
+  mesaMaestraId = 1;
 
   constructor(
     public torneoService: TorneoService,
@@ -22,7 +30,64 @@ export class TorneoRondasComponent implements OnInit {
     this.state = this.torneoService.getState();
     if (!this.state.activo) {
       this.router.navigate(['/']);
+      return;
     }
+
+    if (this.state.mesasRondaActual.length > 0) {
+      this.mesaMaestraId = this.state.mesasRondaActual[0].id;
+    }
+
+    // ⏱ Inicializar cronómetro global
+    this.cronometroConfig = this.partidaService.getCronometroConfig();
+    if (this.cronometroConfig.habilitado) {
+      this.refreshTimerDisplay();
+      this.refreshInterval = setInterval(() => {
+        this.refreshTimerDisplay();
+      }, 1000);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+    }
+  }
+
+  // ⏱ Timer methods
+  private refreshTimerDisplay() {
+    const state = this.partidaService.getTimerState(this.mesaMaestraId);
+    if (!state) return;
+
+    this.timerRemaining = this.partidaService.getRemaining(this.mesaMaestraId);
+    this.timerRunning = state.running;
+    this.timerFinished = state.finished;
+
+    if (this.timerRemaining <= 0 && state.running) {
+      this.state.mesasRondaActual.forEach(m => this.partidaService.markFinished(m.id));
+      this.timerRunning = false;
+      this.timerFinished = true;
+    }
+  }
+
+  formatTime(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  iniciarTimer() {
+    this.state.mesasRondaActual.forEach(m => this.partidaService.startTimer(m.id));
+    this.refreshTimerDisplay();
+  }
+
+  pausarTimer() {
+    this.state.mesasRondaActual.forEach(m => this.partidaService.pauseTimer(m.id));
+    this.refreshTimerDisplay();
+  }
+
+  reiniciarTimer() {
+    this.state.mesasRondaActual.forEach(m => this.partidaService.resetTimer(m.id));
+    this.refreshTimerDisplay();
   }
 
   abrirMesa(mesaId: number) {

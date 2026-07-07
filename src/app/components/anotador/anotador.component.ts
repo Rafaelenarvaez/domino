@@ -47,14 +47,9 @@ export class AnotadorComponent implements OnInit, OnDestroy {
     totales: { equipo1: 0, equipo2: 0 }
   };
 
-  // ⏱ Cronómetro
-  cronometroConfig: CronometroConfig = { habilitado: false, minutos: 30 };
-  timerRemaining: number = 0;
-  timerRunning: boolean = false;
-  timerFinished: boolean = false;
-  private refreshInterval: any = null;
-
   statsRegistradas: boolean = false;
+  partidaTerminada: boolean = false;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -96,68 +91,20 @@ export class AnotadorComponent implements OnInit, OnDestroy {
       }
       this.salidor = s.salidor ?? null;
       this.statsRegistradas = s.statsRegistradas ?? false;
+      this.partidaTerminada = s.partidaTerminada ?? false;
     }
 
-    // ⏱ Inicializar cronómetro
-    this.cronometroConfig = this.service.getCronometroConfig();
-    if (this.cronometroConfig.habilitado) {
-      this.refreshTimerDisplay();
-      // Intervalo solo para refrescar la UI cada segundo
-      this.refreshInterval = setInterval(() => {
-        this.refreshTimerDisplay();
-      }, 1000);
-    }
   }
 
   ngOnDestroy(): void {
-    if (this.refreshInterval) {
-      clearInterval(this.refreshInterval);
-    }
-  }
-
-  // ⏱ Timer methods
-  private refreshTimerDisplay() {
-    const state = this.service.getTimerState(this.mesaId);
-    if (!state) return;
-
-    this.timerRemaining = this.service.getRemaining(this.mesaId);
-    this.timerRunning = state.running;
-    this.timerFinished = state.finished;
-
-    // Auto-marcar como finalizado si se acabó el tiempo
-    if (this.timerRemaining <= 0 && state.running) {
-      this.service.markFinished(this.mesaId);
-      this.timerRunning = false;
-      this.timerFinished = true;
-    }
-  }
-
-  formatTime(seconds: number): string {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  }
-
-  iniciarTimer() {
-    this.service.startTimer(this.mesaId);
-    this.refreshTimerDisplay();
-  }
-
-  pausarTimer() {
-    this.service.pauseTimer(this.mesaId);
-    this.refreshTimerDisplay();
-  }
-
-  reiniciarTimer() {
-    this.service.resetTimer(this.mesaId);
-    this.refreshTimerDisplay();
   }
 
   private saveState() {
     const payload = {
       anotador: this.anotador,
       salidor: this.salidor,
-      statsRegistradas: this.statsRegistradas
+      statsRegistradas: this.statsRegistradas,
+      partidaTerminada: this.partidaTerminada
     };
     localStorage.setItem(`anotador_mesa_${this.mesaId}`, JSON.stringify(payload));
   }
@@ -168,10 +115,7 @@ export class AnotadorComponent implements OnInit, OnDestroy {
     this.saveState();
   }
 
-  get partidaTerminada(): boolean {
-    return this.anotador.totales.equipo1 >= this.puntosParaGanar ||
-           this.anotador.totales.equipo2 >= this.puntosParaGanar;
-  }
+
 
   confirmScore(equipo: 'equipo1' | 'equipo2', value: number | null) {
     if (this.partidaTerminada) return;
@@ -197,8 +141,6 @@ export class AnotadorComponent implements OnInit, OnDestroy {
 
     if (equipo === 'equipo1') this.newScore1 = null;
     else this.newScore2 = null;
-
-    this.verificarVictoria();
   }
 
   toggleTachar(i: number, equipo: 'equipo1' | 'equipo2') {
@@ -225,22 +167,23 @@ export class AnotadorComponent implements OnInit, OnDestroy {
     }
 
     this.saveState();
-    this.verificarVictoria();
   }
 
-  verificarVictoria() {
-    if (
-      this.anotador.totales.equipo1 >= this.puntosParaGanar ||
-      this.anotador.totales.equipo2 >= this.puntosParaGanar
-    ) {
+  finalizarPartidaManual() {
+    this.partidaTerminada = true;
+    this.saveState();
 
-      if (this.anotador.totales.equipo1 > this.anotador.totales.equipo2) {
-        this.ganadorTexto = `🏆 Ganó el equipo 1`;
-        this.registrarStats(1);
-      } else {
-        this.ganadorTexto = `🏆 Ganó el equipo 2`;
-        this.registrarStats(2);
-      }
+    if (this.anotador.totales.equipo1 > this.anotador.totales.equipo2) {
+      this.ganadorTexto = `🏆 Ganó el equipo 1`;
+      this.registrarStats(1);
+    } else if (this.anotador.totales.equipo2 > this.anotador.totales.equipo1) {
+      this.ganadorTexto = `🏆 Ganó el equipo 2`;
+      this.registrarStats(2);
+    } else {
+      this.ganadorTexto = `⚖️ Empate`;
+      // No registramos un ganador claro en stats, o podrías decidir registrarlo como 0
+      // En torneos no hay empates, así que simplemente no registramos nada y dejamos que lo arreglen.
+    }
 
       this.showModal = true;
       
@@ -251,9 +194,8 @@ export class AnotadorComponent implements OnInit, OnDestroy {
           restrict: 'self-only'
         });
         SpatialNavigation.makeFocusable('modal');
-        SpatialNavigation.focus('#btnVolverMesas');
+        SpatialNavigation.focus('modal');
       }, 100);
-    }
   }
 
   private registrarStats(equipoGanador: 1 | 2) {
@@ -275,15 +217,15 @@ export class AnotadorComponent implements OnInit, OnDestroy {
       let puntosPerdedores = 0;
 
       if (equipoGanador === 1) {
-        nombresGanadores = this.jugadoresEquipo1.map(j => j.nombre);
-        nombresPerdedores = this.jugadoresEquipo2.map(j => j.nombre);
-        puntosGanadores = this.anotador.totales.equipo1;
-        puntosPerdedores = this.anotador.totales.equipo2;
+        nombresGanadores = this.jugadoresEquipo1.map((j: Jugador) => j.nombre);
+        nombresPerdedores = this.jugadoresEquipo2.map((j: Jugador) => j.nombre);
+        puntosGanadores = this.anotador.totales.equipo1!;
+        puntosPerdedores = this.anotador.totales.equipo2!;
       } else {
-        nombresGanadores = this.jugadoresEquipo2.map(j => j.nombre);
-        nombresPerdedores = this.jugadoresEquipo1.map(j => j.nombre);
-        puntosGanadores = this.anotador.totales.equipo2;
-        puntosPerdedores = this.anotador.totales.equipo1;
+        nombresGanadores = this.jugadoresEquipo2.map((j: Jugador) => j.nombre);
+        nombresPerdedores = this.jugadoresEquipo1.map((j: Jugador) => j.nombre);
+        puntosGanadores = this.anotador.totales.equipo2!;
+        puntosPerdedores = this.anotador.totales.equipo1!;
       }
 
       this.service.registrarResultadoPartida(

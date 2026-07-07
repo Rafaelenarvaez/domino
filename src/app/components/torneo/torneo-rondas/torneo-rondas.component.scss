@@ -173,24 +173,135 @@
   padding-bottom: 40px;
 }
 
-.btn-next-round, .btn-finish-torneo {
-  font-size: 18px;
-  font-weight: bold;
-  padding: 16px 32px;
-  border: none;
+.btn-next-round,  .btn-finish-torneo {
+    background: linear-gradient(135deg, #d32f2f, #9a0007);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(211, 47, 47, 0.6);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+/************* ⏱ CRONÓMETRO WIDGET *************/
+.cronometro-widget {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 20px auto;
+  padding: 14px;
+  background: #f0f4f8;
   border-radius: 12px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  transition: all 0.2s;
+  border: 1px solid #dde3ea;
+  box-sizing: border-box;
 }
 
-.btn-next-round {
-  background: #3182ce;
-  color: white;
+.cronometro-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #263238;
+  color: #4caf50;
+  transition: all 0.3s ease;
+}
+
+.cronometro-display.warning {
+  color: #ff9800;
+}
+
+.cronometro-display.danger {
+  color: #f44336;
+  animation: timerPulse 1s infinite;
+}
+
+.cronometro-display.finished {
+  color: #f44336;
+  background: #1a1a1a;
+  animation: timerPulse 0.6s infinite;
+}
+
+.timer-icon {
+  font-size: 22px;
+}
+
+.timer-time {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 3px;
+}
+
+.timer-label {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  animation: timerBlink 0.8s infinite;
+}
+
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes timerBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cronometro-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+
+  .ctrl-btn {
+    flex: 1;
+    max-width: 140px;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
   
-  &:hover {
-    background: #2b6cb0;
-    transform: translateY(-2px);
+  .ctrl-start {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+    &:active { background: #c8e6c9; }
+    &:disabled { background: #f1f8e9; color: #a5d6a7; border-color: #c5e1a5; cursor: not-allowed; }
+  }
+  
+  .ctrl-pause {
+    background: #fff3e0;
+    color: #ef6c00;
+    border: 1px solid #ffcc80;
+    &:active { background: #ffe0b2; }
+    &:disabled { background: #fff8e1; color: #ffcc80; border-color: #ffe082; cursor: not-allowed; }
+  }
+  
+  .ctrl-reset {
+    background: #eceff1;
+    color: #455a64;
+    border: 1px solid #b0bec5;
+    &:active { background: #cfd8dc; }
+    &:disabled { background: #f5f7f8; color: #b0bec5; border-color: #cfd8dc; cursor: not-allowed; }
   }
 }
 

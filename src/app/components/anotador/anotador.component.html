@@ -69,34 +69,6 @@
         </div>
     </div>
 
-    <!-- ⏱ CRONÓMETRO -->
-    <div class="cronometro-widget" *ngIf="cronometroConfig.habilitado">
-        <div class="cronometro-display"
-             [class.warning]="timerRemaining <= 300 && timerRemaining > 60"
-             [class.danger]="timerRemaining <= 60 && !timerFinished"
-             [class.finished]="timerFinished">
-            <span class="timer-icon">⏱</span>
-            <span class="timer-time">{{ formatTime(timerRemaining) }}</span>
-            <span class="timer-label" *ngIf="timerFinished">¡Tiempo!</span>
-        </div>
-
-        <div class="cronometro-controls">
-            <button class="ctrl-btn ctrl-start"
-                    (click)="iniciarTimer()"
-                    [disabled]="timerRunning || timerFinished">
-                ▶ Iniciar
-            </button>
-            <button class="ctrl-btn ctrl-pause"
-                    (click)="pausarTimer()"
-                    [disabled]="!timerRunning">
-                ⏸ Pausar
-            </button>
-            <button class="ctrl-btn ctrl-reset"
-                    (click)="reiniciarTimer()">
-                🔄 Reiniciar
-            </button>
-        </div>
-    </div>
 
     <!-- HOJA -->
     <div class="scores-table">
@@ -174,7 +146,15 @@
         </div>
 
     </div>
+
+    <!-- BOTÓN FINALIZAR PARTIDA -->
+    <div class="end-match-container">
+        <button class="btn-finalizar" (click)="finalizarPartidaManual()" [disabled]="partidaTerminada">
+            🏁 Finalizar Partida
+        </button>
+    </div>
 </div>
+
 
   <!-- MODAL FINAL -->
   <div class="modal-backdrop" *ngIf="showModal" (click)="salir()">

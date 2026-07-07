@@ -5,6 +5,35 @@
 <div class="mesas-container">
   <h1 class="mesas-title">Mesas en juego</h1>
 
+  <!-- ⏱ CRONÓMETRO GLOBAL -->
+  <div class="cronometro-widget" *ngIf="cronometroConfig.habilitado">
+      <div class="cronometro-display"
+           [class.warning]="timerRemaining <= 300 && timerRemaining > 60"
+           [class.danger]="timerRemaining <= 60 && !timerFinished"
+           [class.finished]="timerFinished">
+          <span class="timer-icon">⏱</span>
+          <span class="timer-time">{{ formatTime(timerRemaining) }}</span>
+          <span class="timer-label" *ngIf="timerFinished">¡Tiempo!</span>
+      </div>
+
+      <div class="cronometro-controls">
+          <button class="ctrl-btn ctrl-start"
+                  (click)="iniciarTimer()"
+                  [disabled]="timerRunning || timerFinished">
+              ▶ Iniciar
+          </button>
+          <button class="ctrl-btn ctrl-pause"
+                  (click)="pausarTimer()"
+                  [disabled]="!timerRunning">
+              ⏸ Pausar
+          </button>
+          <button class="ctrl-btn ctrl-reset"
+                  (click)="reiniciarTimer()">
+              🔄 Reiniciar
+          </button>
+      </div>
+  </div>
+
   <div class="mesas-list">
     <div class="mesa-card" *ngFor="let mesa of mesas">
       <h2>Mesa {{ mesa.id }}</h2>

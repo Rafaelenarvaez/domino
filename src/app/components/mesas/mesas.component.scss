@@ -43,16 +43,132 @@
 }
 
 .back-btn {
-  margin-top: 24px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  background: #757575;
-  color: white;
-  border: none;
-  padding: 8px 18px;
+  margin-top: 30px;
+  padding: 12px 24px;
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s;
+    
+  &:hover, &:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    outline: none;
+  }
+}
+
+/************* ⏱ CRONÓMETRO WIDGET *************/
+.cronometro-widget {
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 20px;
+  padding: 14px;
+  background: #f0f4f8;
+  border-radius: 12px;
+  border: 1px solid #dde3ea;
+  box-sizing: border-box;
+}
+
+.cronometro-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #263238;
+  color: #4caf50;
+  transition: all 0.3s ease;
+}
+
+.cronometro-display.warning {
+  color: #ff9800;
+}
+
+.cronometro-display.danger {
+  color: #f44336;
+  animation: timerPulse 1s infinite;
+}
+
+.cronometro-display.finished {
+  color: #f44336;
+  background: #1a1a1a;
+  animation: timerPulse 0.6s infinite;
+}
+
+.timer-icon {
+  font-size: 22px;
+}
+
+.timer-time {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 3px;
+}
+
+.timer-label {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  animation: timerBlink 0.8s infinite;
+}
+
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes timerBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cronometro-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+
+  .ctrl-btn {
+    flex: 1;
+    max-width: 140px;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .ctrl-start {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+    &:active { background: #c8e6c9; }
+    &:disabled { background: #f1f8e9; color: #a5d6a7; border-color: #c5e1a5; cursor: not-allowed; }
+  }
+  
+  .ctrl-pause {
+    background: #fff3e0;
+    color: #ef6c00;
+    border: 1px solid #ffcc80;
+    &:active { background: #ffe0b2; }
+    &:disabled { background: #fff8e1; color: #ffcc80; border-color: #ffe082; cursor: not-allowed; }
+  }
+  
+  .ctrl-reset {
+    background: #eceff1;
+    color: #455a64;
+    border: 1px solid #b0bec5;
+    &:active { background: #cfd8dc; }
+    &:disabled { background: #f5f7f8; color: #b0bec5; border-color: #cfd8dc; cursor: not-allowed; }
+  }
 }
 
 .logo-container {
