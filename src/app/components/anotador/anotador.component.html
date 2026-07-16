@@ -147,10 +147,13 @@
 
     </div>
 
-    <!-- BOTÓN FINALIZAR PARTIDA -->
+    <!-- BOTONES INFERIORES -->
     <div class="end-match-container">
-        <button class="btn-finalizar" (click)="finalizarPartidaManual()" [disabled]="partidaTerminada">
+        <button class="btn-finalizar" (click)="finalizarPartidaManual()" *ngIf="!partidaTerminada">
             🏁 Finalizar Partida
+        </button>
+        <button class="btn-finalizar" style="background: linear-gradient(135deg, #1976d2, #115293);" (click)="mostrarResultados()" *ngIf="partidaTerminada">
+            📊 Ver Resultados
         </button>
     </div>
 </div>

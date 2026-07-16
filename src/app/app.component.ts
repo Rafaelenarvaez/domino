@@ -56,7 +56,13 @@ export class AppComponent implements OnInit {
   mostrarModalApp() {
     this.showExitAppModal = true;
     setTimeout(() => {
-      SpatialNavigation.focus('#cancelExitBtn');
+      SpatialNavigation.add('exitAppModal', {
+        selector: '#cancelExitBtn, .btn-confirm',
+        restrict: 'self-only',
+        defaultElement: '#cancelExitBtn'
+      });
+      SpatialNavigation.makeFocusable('exitAppModal');
+      SpatialNavigation.focus('exitAppModal');
     }, 100);
   }
 
@@ -66,6 +72,7 @@ export class AppComponent implements OnInit {
 
   cancelExit() {
     this.showExitAppModal = false;
+    SpatialNavigation.remove('exitAppModal');
     setTimeout(() => {
       SpatialNavigation.focus();
     }, 100);

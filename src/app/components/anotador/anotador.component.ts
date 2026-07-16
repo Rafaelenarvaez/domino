@@ -92,6 +92,11 @@ export class AnotadorComponent implements OnInit, OnDestroy {
       this.salidor = s.salidor ?? null;
       this.statsRegistradas = s.statsRegistradas ?? false;
       this.partidaTerminada = s.partidaTerminada ?? false;
+
+      // Si la partida ya había terminado y se refresca, mostramos los resultados automáticamente
+      if (this.partidaTerminada && !this.showModal) {
+        setTimeout(() => this.mostrarResultados(), 500);
+      }
     }
 
   }
@@ -171,31 +176,38 @@ export class AnotadorComponent implements OnInit, OnDestroy {
 
   finalizarPartidaManual() {
     this.partidaTerminada = true;
-    this.saveState();
 
     if (this.anotador.totales.equipo1 > this.anotador.totales.equipo2) {
-      this.ganadorTexto = `🏆 Ganó el equipo 1`;
       this.registrarStats(1);
     } else if (this.anotador.totales.equipo2 > this.anotador.totales.equipo1) {
-      this.ganadorTexto = `🏆 Ganó el equipo 2`;
       this.registrarStats(2);
-    } else {
-      this.ganadorTexto = `⚖️ Empate`;
-      // No registramos un ganador claro en stats, o podrías decidir registrarlo como 0
-      // En torneos no hay empates, así que simplemente no registramos nada y dejamos que lo arreglen.
     }
 
-      this.showModal = true;
+    this.saveState();
+    this.mostrarResultados();
+  }
+
+  mostrarResultados() {
+    if (this.anotador.totales.equipo1 > this.anotador.totales.equipo2) {
+      this.ganadorTexto = `🏆 Ganó el equipo 1`;
+    } else if (this.anotador.totales.equipo2 > this.anotador.totales.equipo1) {
+      this.ganadorTexto = `🏆 Ganó el equipo 2`;
+    } else {
+      this.ganadorTexto = `⚖️ Empate`;
+    }
+
+    this.showModal = true;
       
-      // Actualizar navegación espacial para atrapar el foco en el modal
-      setTimeout(() => {
-        SpatialNavigation.add('modal', {
-          selector: '.modal-btn',
-          restrict: 'self-only'
-        });
-        SpatialNavigation.makeFocusable('modal');
-        SpatialNavigation.focus('modal');
-      }, 100);
+    // Actualizar navegación espacial para atrapar el foco en el modal
+    setTimeout(() => {
+      SpatialNavigation.add('modal', {
+        selector: '.modal-btn',
+        restrict: 'self-only',
+        defaultElement: '#btnVolverMesas'
+      });
+      SpatialNavigation.makeFocusable('modal');
+      SpatialNavigation.focus('modal');
+    }, 100);
   }
 
   private registrarStats(equipoGanador: 1 | 2) {
@@ -268,6 +280,7 @@ export class AnotadorComponent implements OnInit, OnDestroy {
     this.newScore2 = null;
     this.showModal = false;
     this.statsRegistradas = false;
+    this.partidaTerminada = false;
 
     this.saveState();
   }
@@ -290,17 +303,25 @@ export class AnotadorComponent implements OnInit, OnDestroy {
     // Si no ha terminado, mostramos la confirmación
     this.showExitMatchModal = true;
     setTimeout(() => {
-      SpatialNavigation.focus('#cancelExitMatchBtn');
+      SpatialNavigation.add('exitModal', {
+        selector: '#cancelExitMatchBtn, .btn-volver-mesas',
+        restrict: 'self-only',
+        defaultElement: '#cancelExitMatchBtn'
+      });
+      SpatialNavigation.makeFocusable('exitModal');
+      SpatialNavigation.focus('exitModal');
     }, 100);
   }
 
   confirmarSalida() {
     this.showExitMatchModal = false;
+    SpatialNavigation.remove('exitModal');
     this.volverAMesas();
   }
 
   cancelarSalida() {
     this.showExitMatchModal = false;
+    SpatialNavigation.remove('exitModal');
     setTimeout(() => {
       SpatialNavigation.focus();
     }, 100);
