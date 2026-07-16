@@ -109,6 +109,18 @@ export class TorneoRondasComponent implements OnInit, OnDestroy {
 
     this.torneoService.generarSiguienteRonda();
     this.state = this.torneoService.getState();
+
+    // Inicializar cronómetro para las nuevas mesas si está habilitado
+    if (this.cronometroConfig && this.cronometroConfig.habilitado) {
+      this.state.mesasRondaActual.forEach(m => {
+        this.partidaService.initTimer(m.id, this.cronometroConfig.minutos * 60);
+      });
+      // Asegurarse de que el maestro id esté actualizado
+      if (this.state.mesasRondaActual.length > 0) {
+        this.mesaMaestraId = this.state.mesasRondaActual[0].id;
+      }
+      this.refreshTimerDisplay();
+    }
   }
 
   finalizarTorneo() {

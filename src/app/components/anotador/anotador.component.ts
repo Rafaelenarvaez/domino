@@ -282,6 +282,9 @@ export class AnotadorComponent implements OnInit, OnDestroy {
     this.statsRegistradas = false;
     this.partidaTerminada = false;
 
+    // Resetear el temporizador si existe
+    this.service.resetTimer(this.mesaId);
+
     this.saveState();
   }
 

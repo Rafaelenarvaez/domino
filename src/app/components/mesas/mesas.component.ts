@@ -33,6 +33,11 @@ export class MesasComponent implements OnInit, OnDestroy {
     // ⏱ Inicializar cronómetro global
     this.cronometroConfig = this.service.getCronometroConfig();
     if (this.cronometroConfig.habilitado) {
+      this.mesas.forEach(m => {
+        if (!this.service.getTimerState(m.id)) {
+          this.service.initTimer(m.id, this.cronometroConfig.minutos * 60);
+        }
+      });
       this.refreshTimerDisplay();
       this.refreshInterval = setInterval(() => {
         this.refreshTimerDisplay();
